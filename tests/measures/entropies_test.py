@@ -27,12 +27,12 @@ def test_conditional_shannon_entropy():
     assert H_conditional(dist1, 1) == 1.0
 
     dist1={(0, 0):1/8, (0, 1):1/8, (1, 0):1/8, (1, 1):5/8}
-    H_0 = H_conditional(dist1, 0)
-    assert np.isclose(H_0, (1/4)*(.5*np.log2(2) + .5*np.log2(2))
+    h_0 = H_conditional(dist1, 0)
+    assert np.isclose(h_0, (1/4)*(.5*np.log2(2) + .5*np.log2(2))
                         +(3/4)*((1/6)*np.log2(6) + (5/6)*np.log2(6/5))
                     )
-    H_1 = H_conditional(dist1, 1)
-    assert np.isclose(H_1, (1/4)*(.5*np.log2(2) + .5*np.log2(2))
+    h_1 = H_conditional(dist1, 1)
+    assert np.isclose(h_1, (1/4)*(.5*np.log2(2) + .5*np.log2(2))
                         +(3/4)*((1/6)*np.log2(6) + (5/6)*np.log2(6/5))
                     )
 
