@@ -1,6 +1,6 @@
 import numpy as np
-from utils import sliding_window
-from distributions import empirical_dist
+from itm.utils import sliding_window
+from itm.distributions import empirical_dist
 
 
 def correlation(x, y):

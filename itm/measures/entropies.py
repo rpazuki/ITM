@@ -1,8 +1,8 @@
 import numpy as np
-from utils import sliding_window
-from distributions import empirical_dist
-from distributions import marginal
-from distributions import conditional
+from itm.utils import sliding_window
+from itm.distributions import empirical_dist
+from itm.distributions import marginal
+from itm.distributions import conditional
 
 def H(prob_x):
     '''Shannon Entropy'''
@@ -19,11 +19,10 @@ def H_conditional(prob_xy, *cols):
 
 def I(prob_xy):
     ''' Mutual Information
-        I(X,Y) = H(X) + H(Y) - H(X,Y)
+        I(X,Y) = H(X) - H(X|Y)
         Assumes there are two columns in prob_xy'''
     prob_x = marginal(prob_xy, 0)
-    prob_y = marginal(prob_xy, 1)
-    return H(prob_x) + H(prob_y) - H(prob_xy)
+    return H(prob_x) - H_conditional(prob_xy, 0)
 
 def I2(prob_xy):
     ''' Mutual Information
@@ -33,10 +32,11 @@ def I2(prob_xy):
 
 def I3(prob_xy):
     ''' Mutual Information
-        I(X,Y) = H(X) - H(X|Y)
+        I(X,Y) = H(X) + H(Y) - H(X,Y)
         Assumes there are two columns in prob_xy'''
     prob_x = marginal(prob_xy, 0)
-    return H(prob_x) - H_conditional(prob_xy, 0)
+    prob_y = marginal(prob_xy, 1)
+    return H(prob_x) + H(prob_y) - H(prob_xy)
 
 def I_conditional(prob_xyz, *cols):
     ''' Conditional Mutual Information

@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.random import default_rng
-from measures.statistical import correlation
-from measures.statistical import autocorrelation
+from itm.measures.statistical import correlation
+from itm.measures.statistical import autocorrelation
 
 def test_correlation():
     '''Test correlation function'''

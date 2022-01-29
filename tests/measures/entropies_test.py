@@ -1,12 +1,12 @@
 import numpy as np
-from measures.entropies import H
-from measures.entropies import H_conditional
-from measures.entropies import I
-from measures.entropies import I2
-from measures.entropies import I3
-from measures.entropies import I_conditional
-from measures.entropies import I2_conditional
-from measures.entropies import I3_conditional
+from itm.measures.entropies import H
+from itm.measures.entropies import H_conditional
+from itm.measures.entropies import I
+from itm.measures.entropies import I2
+from itm.measures.entropies import I3
+from itm.measures.entropies import I_conditional
+from itm.measures.entropies import I2_conditional
+from itm.measures.entropies import I3_conditional
 
 def test_shannon_entropy():
     '''Test Entropy'''

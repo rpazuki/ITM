@@ -1,7 +1,7 @@
-from distributions import empirical_dist
-from distributions import marginal
-from distributions import conditional
-from distributions import marginal_conditional
+from itm.distributions import empirical_dist
+from itm.distributions import marginal
+from itm.distributions import conditional
+from itm.distributions import marginal_conditional
 
 def test_dist():
     dist1 = empirical_dist([0,1])

@@ -1,6 +1,6 @@
 import numpy as np
-from measures.entropies import TE
-from measures.entropies import TE_Condition
+from itm.measures.entropies import TE
+from itm.measures.entropies import TE_Condition
 
 
 def test_transfer_entropy():
