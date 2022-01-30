@@ -19,5 +19,5 @@ def autocorrelation(x, max_lag=1):
     x_columns = np.array([row for row in sliding_window(x, max_lag+1)])
     return np.array([
         correlation(x_columns[:, 0], x_columns[:, index])
-        for index in range(1, max_lag+1)
+        for index in range(max_lag+1)
         ])

@@ -20,9 +20,11 @@ def test_autocorrelation():
     rng = default_rng(43)
     x = rng.standard_normal(10000)
     autocorrelation_1 = autocorrelation(x, 1)
-    assert autocorrelation_1[0] < 0.01
+    assert autocorrelation_1[0] > 0.99
+    assert autocorrelation_1[1] < 0.01
     autocorrelation_4 = autocorrelation(x, 4)
-    assert autocorrelation_4[0] < 0.01
+    assert autocorrelation_4[0] > 0.99
     assert autocorrelation_4[1] < 0.01
     assert autocorrelation_4[2] < 0.01
     assert autocorrelation_4[3] < 0.01
+    assert autocorrelation_4[4] < 0.01
