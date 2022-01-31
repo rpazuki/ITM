@@ -141,3 +141,9 @@ def conditional_transfer_entropy(x, y, z, k, i, j):
     prob_y_i_1_z_j_x_k = empirical_dist(y_i_1_z_j_x_k)
     # find the conditional mutual entropy
     return conditional_mutual_information(prob_y_i_1_z_j_x_k, 0, 1)
+
+def kullback_leibler(dist_p, dist_q):
+    '''Kullback–Leibler distance'''
+    probabilites = np.array([
+        (p1, dist_q[k]) for k,p1 in dist_p.items() if p1 !=0 and dist_q[k] != 0])
+    return np.sum(probabilites[:,0]*np.log2(probabilites[:, 0]/probabilites[:, 1]))

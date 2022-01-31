@@ -8,5 +8,6 @@ from itm.measures.entropies import conditional_mutual_information2
 from itm.measures.entropies import conditional_mutual_information3
 from itm.measures.entropies import transfer_entropy
 from itm.measures.entropies import conditional_transfer_entropy
+from itm.measures.entropies import kullback_leibler
 from itm.measures.statistical import correlation
 from itm.measures.statistical import autocorrelation
