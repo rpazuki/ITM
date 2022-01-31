@@ -1,6 +1,7 @@
 from collections import Counter
 from itertools import  zip_longest, groupby
 from operator import itemgetter
+import numpy as np
 
 def empirical_dist(*data, fillvalue='-'):
     '''Empirical distribution'''
@@ -10,6 +11,13 @@ def empirical_dist(*data, fillvalue='-'):
         hist = Counter([row for row in zip_longest(*data, fillvalue=fillvalue)])
     values_sum = sum(hist.values())
     return Counter({ k:v/values_sum for k,v in hist.items()})
+
+def moments(dist, degree):
+    '''Find the moment degree of the dist
+
+       it assumes the columns of the dist are
+       numbers'''
+    return sum([ (np.prod(k)**degree)*p for k,p in dist.items() ])
 
 # Important note:
 #

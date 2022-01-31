@@ -1,37 +1,37 @@
 import numpy as np
-from itm.measures.entropies import H
-from itm.measures.entropies import H_conditional
-from itm.measures.entropies import I
-from itm.measures.entropies import I2
-from itm.measures.entropies import I3
-from itm.measures.entropies import I_conditional
-from itm.measures.entropies import I2_conditional
-from itm.measures.entropies import I3_conditional
+from itm.measures.entropies import entropy
+from itm.measures.entropies import conditional_entropy
+from itm.measures.entropies import mutual_information
+from itm.measures.entropies import mutual_information2
+from itm.measures.entropies import mutual_information3
+from itm.measures.entropies import conditional_mutual_information
+from itm.measures.entropies import conditional_mutual_information2
+from itm.measures.entropies import conditional_mutual_information3
 
 def test_shannon_entropy():
     '''Test Entropy'''
     dist1 = {0:.5, 1:.5}
-    assert H(dist1) == 1.0
+    assert entropy(dist1) == 1.0
 
     dist1 = {0:1, 1:0}
-    assert H(dist1) == 0.0
+    assert entropy(dist1) == 0.0
 
 def test_conditional_shannon_entropy():
     '''Test Conditional Entropy'''
     dist1={(0, 0):.5, (1, 1):.5}
-    assert H_conditional(dist1, 0) == 0.0
-    assert H_conditional(dist1, 1) == 0.0
+    assert conditional_entropy(dist1, 0) == 0.0
+    assert conditional_entropy(dist1, 1) == 0.0
 
     dist1={(0, 0):.25, (0, 1):.25, (1, 0):.25, (1, 1):.25}
-    assert H_conditional(dist1, 0) == 1.0
-    assert H_conditional(dist1, 1) == 1.0
+    assert conditional_entropy(dist1, 0) == 1.0
+    assert conditional_entropy(dist1, 1) == 1.0
 
     dist1={(0, 0):1/8, (0, 1):1/8, (1, 0):1/8, (1, 1):5/8}
-    h_0 = H_conditional(dist1, 0)
+    h_0 = conditional_entropy(dist1, 0)
     assert np.isclose(h_0, (1/4)*(.5*np.log2(2) + .5*np.log2(2))
                         +(3/4)*((1/6)*np.log2(6) + (5/6)*np.log2(6/5))
                     )
-    h_1 = H_conditional(dist1, 1)
+    h_1 = conditional_entropy(dist1, 1)
     assert np.isclose(h_1, (1/4)*(.5*np.log2(2) + .5*np.log2(2))
                         +(3/4)*((1/6)*np.log2(6) + (5/6)*np.log2(6/5))
                     )
@@ -39,36 +39,36 @@ def test_conditional_shannon_entropy():
 def test_mutual_information():
     '''Test Mutual Information'''
     dist1={(0, 0):.5, (1, 1):.5}
-    assert I(dist1) == 1.0
-    assert I2(dist1) == 1.0
-    assert I3(dist1) == 1.0
+    assert mutual_information(dist1) == 1.0
+    assert mutual_information2(dist1) == 1.0
+    assert mutual_information3(dist1) == 1.0
 
     dist1={(0, 0):.25, (0, 1):.25, (1, 0):.25, (1, 1):.25}
-    assert I(dist1) == 0.0
-    assert I2(dist1) == 0.0
-    assert I3(dist1) == 0.0
+    assert mutual_information(dist1) == 0.0
+    assert mutual_information2(dist1) == 0.0
+    assert mutual_information3(dist1) == 0.0
 
     dist1={(0, 0):1/8, (0, 1):1/8, (1, 0):1/8, (1, 1):5/8}
     entropy_1 = (1/4)*np.log2(4) + (3/4)*np.log2(4/3)
     entropy_2 = 3*(1/8)*np.log2(8) + (5/8)*np.log2(8/5)
 
-    assert np.isclose(I(dist1), 2*entropy_1 - entropy_2)
-    assert np.isclose(I2(dist1), 2*entropy_1 - entropy_2)
-    assert np.isclose(I3(dist1), 2*entropy_1 - entropy_2)
+    assert np.isclose(mutual_information(dist1), 2*entropy_1 - entropy_2)
+    assert np.isclose(mutual_information2(dist1), 2*entropy_1 - entropy_2)
+    assert np.isclose(mutual_information3(dist1), 2*entropy_1 - entropy_2)
 
 def test_conditional_mutual_information():
     '''Test Conditional Mutual Information'''
     dist1={(0, 0, 0):.5, (1, 1, 1):.5}
-    assert I_conditional(dist1, 2) == 0.0
-    assert I2_conditional(dist1, 2) == 0.0
-    assert I3_conditional(dist1, 2) == 0.0
+    assert conditional_mutual_information(dist1, 2) == 0.0
+    assert conditional_mutual_information2(dist1, 2) == 0.0
+    assert conditional_mutual_information3(dist1, 2) == 0.0
 
     dist1={(0, 0, 0):.5, (1, 1, 0):.5}
-    assert I_conditional(dist1, 2) == 1.0
-    assert I2_conditional(dist1, 2) == 1.0
-    assert I3_conditional(dist1, 2) == 1.0
+    assert conditional_mutual_information(dist1, 2) == 1.0
+    assert conditional_mutual_information2(dist1, 2) == 1.0
+    assert conditional_mutual_information3(dist1, 2) == 1.0
 
     dist1={(0, 0, 0):.25, (0, 1, 0):.25, (1, 0, 0):.25, (1, 1, 0):.25}
-    assert I_conditional(dist1, 2) == 0.0
-    assert I2_conditional(dist1, 2) == 0.0
-    assert I3_conditional(dist1, 2) == 0.0
+    assert conditional_mutual_information(dist1, 2) == 0.0
+    assert conditional_mutual_information2(dist1, 2) == 0.0
+    assert conditional_mutual_information3(dist1, 2) == 0.0

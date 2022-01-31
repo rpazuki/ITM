@@ -1,4 +1,6 @@
+from math import dist
 from itm.distributions import empirical_dist
+from itm.distributions import moments
 from itm.distributions import marginal
 from itm.distributions import conditional
 from itm.distributions import marginal_conditional
@@ -15,6 +17,28 @@ def test_dist():
     assert dist1[(0,1)] == .25
     assert dist1[(1,0)] == .25
     assert dist1[(1,1)] == .25
+
+def test_moments():
+    dist1 = {0:.5, 1:0.5}
+    assert moments(dist1, 1) == 0.5
+    assert moments(dist1, 2) == 0.5
+    assert moments(dist1, 2) == 0.5
+
+    dist1 = {0:.5, 2:0.5}
+    assert moments(dist1, 1) == 1.0
+    assert moments(dist1, 2) == 2.0
+    assert moments(dist1, 3) == 4.0
+
+    dist1 = {(0,0):.25, (0,1):0.25, (1,0):0.25, (1,2):0.25}
+    assert moments(dist1, 1) == 0.5
+    assert moments(dist1, 2) == 1.0
+    assert moments(dist1, 3) == 2.0
+
+    dist1 = {(0,0):.25, (0,1):0.25, (1,0):0.25, (2,2):0.25}
+    assert moments(dist1, 1) == 1.0
+    assert moments(dist1, 2) == 4.0
+    assert moments(dist1, 3) == 16.0
+
 
 def test_marginal():
     dist0 = {(0, 0):.25, (0, 1):.25, (1, 0):.25, (1, 1):.25}

@@ -4,41 +4,41 @@ from itm.distributions import empirical_dist
 from itm.distributions import marginal
 from itm.distributions import conditional
 
-def H(prob_x):
+def entropy(prob_x):
     '''Shannon Entropy'''
     probabilites = np.fromiter((v for _,v in prob_x.items()), dtype=np.float128 )
     non_zeros_probabilites = probabilites[np.nonzero(probabilites)]
     return -np.sum(non_zeros_probabilites*np.log2(non_zeros_probabilites))
 
-def H_conditional(prob_xy, *cols):
+def conditional_entropy(prob_xy, *cols):
     '''Conditional Shannon Entrop
        Conditioned on the given columns of distribution'''
     conditional_prob = conditional(prob_xy, *cols)
     marginal_prob = marginal(prob_xy, *cols)
-    return sum([ marginal_prob[k]*H(dist) for k, dist in conditional_prob.items()])
+    return sum([ marginal_prob[k]*entropy(dist) for k, dist in conditional_prob.items()])
 
-def I(prob_xy):
+def mutual_information(prob_xy):
     ''' Mutual Information
         I(X,Y) = H(X) - H(X|Y)
         Assumes there are two columns in prob_xy'''
     prob_x = marginal(prob_xy, 0)
-    return H(prob_x) - H_conditional(prob_xy, 0)
+    return entropy(prob_x) - conditional_entropy(prob_xy, 0)
 
-def I2(prob_xy):
+def mutual_information2(prob_xy):
     ''' Mutual Information
         I(X,Y) = H(X, Y) - H(X|Y) - H(Y|X)
         Assumes there are two columns in prob_xy'''
-    return  H(prob_xy)- H_conditional(prob_xy, 0)- H_conditional(prob_xy, 1)
+    return  entropy(prob_xy)- conditional_entropy(prob_xy, 0)- conditional_entropy(prob_xy, 1)
 
-def I3(prob_xy):
+def mutual_information3(prob_xy):
     ''' Mutual Information
         I(X,Y) = H(X) + H(Y) - H(X,Y)
         Assumes there are two columns in prob_xy'''
     prob_x = marginal(prob_xy, 0)
     prob_y = marginal(prob_xy, 1)
-    return H(prob_x) + H(prob_y) - H(prob_xy)
+    return entropy(prob_x) + entropy(prob_y) - entropy(prob_xy)
 
-def I_conditional(prob_xyz, *cols):
+def conditional_mutual_information(prob_xyz, *cols):
     ''' Conditional Mutual Information
         I(X,Y|Z) = H(X,Z) + H(Y,Z) - H(X,Y,Z) - H(Z)
         Assumes, after conditioning on cols, there are two columns in prob_XYZ'''
@@ -53,10 +53,10 @@ def I_conditional(prob_xyz, *cols):
     prob_z = marginal(prob_xyz, *cols)
 
     return (
-        H(prob_x_z) + H(prob_y_z) - H(prob_xyz) - H(prob_z)
+        entropy(prob_x_z) + entropy(prob_y_z) - entropy(prob_xyz) - entropy(prob_z)
     )
 
-def I2_conditional(prob_xyz, *cols):
+def conditional_mutual_information2(prob_xyz, *cols):
     ''' Conditional Mutual Information
         I(X,Y|Z) = H(X |Z) - H(X|Y, Z)
         Assumes, after conditioning on cols, there are two columns in prob_xyz'''
@@ -68,11 +68,11 @@ def I2_conditional(prob_xyz, *cols):
     cols_shifted = [ c for c in cols if c < y_col] + [c-1 for c in cols if c > y_col]
     prob_xz = marginal(prob_xyz, *cols_and_x)
     return (
-        H_conditional(prob_xz, *cols_shifted)
-        - H_conditional(prob_xyz, *cols_and_y)
+        conditional_entropy(prob_xz, *cols_shifted)
+        - conditional_entropy(prob_xyz, *cols_and_y)
     )
 
-def I3_conditional(prob_xyz, *cols):
+def conditional_mutual_information3(prob_xyz, *cols):
     ''' Conditional Mutual Information
         I(X,Y|Z) = H(X |Z) + H(Y |Z) - H(X, Y|Z)
         Assumes, after conditioning on cols, there are two columns in prob_xyz'''
@@ -88,12 +88,12 @@ def I3_conditional(prob_xyz, *cols):
     prob_yz = marginal(prob_xyz, *cols_and_y)
     prob_xz = marginal(prob_xyz, *cols_and_x)
     return (
-          H_conditional(prob_yz, *cols_shifted_by_x)
-        + H_conditional(prob_xz, *cols_shifted_by_y)
-        - H_conditional(prob_xyz, *cols)
+          conditional_entropy(prob_yz, *cols_shifted_by_x)
+        + conditional_entropy(prob_xz, *cols_shifted_by_y)
+        - conditional_entropy(prob_xyz, *cols)
     )
 
-def AIS(x, k):
+def active_information_storage(x, k):
     '''Active Information Storage
     I(x_{n-k+1}, ..., x_{n}; x_{n+1})'''
     # create a sliding window, size k
@@ -105,9 +105,9 @@ def AIS(x, k):
     # distribution
     prob_x_k_x = empirical_dist(x_window_k, x[k:])
     # find the mutual information
-    return I3(prob_x_k_x)
+    return mutual_information3(prob_x_k_x)
 
-def TE(x, y, k, i):
+def transfer_entropy(x, y, k, i):
     ''' Transfer Entropy: x = source, y = target
         I(x_{n-k+1}, ..., x_{n}; y_{n+1} | y_{n-i+1}, ..., y_{n})'''
 
@@ -121,9 +121,9 @@ def TE(x, y, k, i):
     # create the joint distributions
     prob_y_i_1_x_k = empirical_dist(y_i_1_x_k)
     # find the conditional mutual entropy
-    return I_conditional(prob_y_i_1_x_k, 0)
+    return conditional_mutual_information(prob_y_i_1_x_k, 0)
 
-def TE_Condition(x, y, z, k, i, j):
+def conditional_transfer_entropy(x, y, z, k, i, j):
     ''' Conditional Transfer Entropy: X = source, Y = target
         I(x_{n-k+1},...,x_{n};y_{n+1}|y_{n-i+1},...,y_{n},z_{n-j+1},...,z_{n})'''
     # create a sliding window, size k from source
@@ -140,4 +140,4 @@ def TE_Condition(x, y, z, k, i, j):
     # create the joint distributions
     prob_y_i_1_z_j_x_k = empirical_dist(y_i_1_z_j_x_k)
     # find the conditional mutual entropy
-    return I_conditional(prob_y_i_1_z_j_x_k, 0, 1)
+    return conditional_mutual_information(prob_y_i_1_z_j_x_k, 0, 1)
