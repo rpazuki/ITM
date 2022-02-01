@@ -1,12 +1,14 @@
 import numpy as np
-from itm.measures.entropies import entropy
-from itm.measures.entropies import conditional_entropy
-from itm.measures.entropies import mutual_information
-from itm.measures.entropies import mutual_information2
-from itm.measures.entropies import mutual_information3
-from itm.measures.entropies import conditional_mutual_information
-from itm.measures.entropies import conditional_mutual_information2
-from itm.measures.entropies import conditional_mutual_information3
+from itm.measures import entropy
+from itm.measures import entropy_miller
+from itm.measures import entropy_jackknified
+from itm.measures import conditional_entropy
+from itm.measures import mutual_information
+from itm.measures import mutual_information2
+from itm.measures import mutual_information3
+from itm.measures import conditional_mutual_information
+from itm.measures import conditional_mutual_information2
+from itm.measures import conditional_mutual_information3
 
 def test_shannon_entropy():
     '''Test Entropy'''
@@ -15,6 +17,23 @@ def test_shannon_entropy():
 
     dist1 = {0:1, 1:0}
     assert entropy(dist1) == 0.0
+
+def test_entropy_millery():
+    '''Test Entropy'''
+    dist1 = {0:.5, 1:.5}
+    assert np.isclose(entropy_miller(dist1, N = 10), (1.0 + 1/20))
+
+    dist1 = {0:1, 1:0}
+    assert np.isclose(entropy_miller(dist1, N = 10), (0.0 + 1/20))
+
+def test_entropy_jackknified():
+    '''Test Entropy'''
+    entropy_1 = entropy({0:2/5, 1:3/5})
+    data = [0, 0, 0, 1, 1, 1]
+    assert np.isclose(entropy_jackknified(data), (6*1.0 - 5*entropy_1))
+
+    data = [1, 1, 1, 1, 1, 1]
+    assert entropy_jackknified(data) == 0.0
 
 def test_conditional_shannon_entropy():
     '''Test Conditional Entropy'''

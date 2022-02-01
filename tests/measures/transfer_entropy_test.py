@@ -1,6 +1,6 @@
 import numpy as np
-from itm.measures.entropies import transfer_entropy
-from itm.measures.entropies import conditional_transfer_entropy
+from itm.measures import transfer_entropy
+from itm.measures import conditional_transfer_entropy
 
 
 def test_transfer_entropy():
