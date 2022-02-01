@@ -20,11 +20,11 @@ def test_shannon_entropy():
 
 def test_entropy_millery():
     '''Test Entropy'''
-    dist1 = {0:.5, 1:.5}
-    assert np.isclose(entropy_miller(dist1, N = 10), (1.0 + 1/20))
+    data = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+    assert np.isclose(entropy_miller(data), (1.0 + 1/20))
 
-    dist1 = {0:1, 1:0}
-    assert np.isclose(entropy_miller(dist1, N = 10), (0.0 + 1/20))
+    data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    assert np.isclose(entropy_miller(data), 0.0)
 
 def test_entropy_jackknified():
     '''Test Entropy'''

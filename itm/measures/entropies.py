@@ -6,6 +6,10 @@ from itm.distributions import conditional
 # Liam Paninski. 2003. Estimation of entropy and mutual information.
 # Neural Comput. 15, 6 (June 2003), 1191–1253.
 # DOI:https://doi.org/10.1162/089976603321780272
+#
+# Use entropy_miller or entropy_jackknified for continuous data
+# the data must be binned first before calling the functions.
+#
 def entropy(prob_x):
     '''Shannon Entropy
 
@@ -14,19 +18,19 @@ def entropy(prob_x):
     non_zeros_probabilites = probabilites[np.nonzero(probabilites)]
     return -np.sum(non_zeros_probabilites*np.log2(non_zeros_probabilites))
 
-def entropy_miller(prob_x, N):
-    '''Shannon Entropy
-
-    N: number of samples
+def entropy_miller(data_x):
+    '''Shannon Entropy for binned continuous data.
 
     Miller-Madow bias correction :
     H(p_N) + (m-1)/N, m is the number of non-zero bins
     '''
+    prob_x = empirical_dist(data_x)
+    N = len(data_x)
     m = len(prob_x.keys())
     return entropy(prob_x) + (m-1)/(2*N)
 
 def entropy_jackknified(data_x):
-    '''Shannon Entropy
+    '''Shannon Entropy for binned continuous data.
 
     H(p_N) - (N-1)/N H(p_{N-1})
     '''
